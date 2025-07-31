@@ -10,16 +10,42 @@
   <h1 class="text-3xl font-bold text-gray-800 mb-6">Wordler</h1>
 
   <!-- Word Grid -->
-  <div class="grid grid-rows-6 gap-2 ">
-    {% for row in "123456" %}
+  <!-- <div class="grid grid-rows-6 gap-2 ">
+    {% for row in "012345" %}
       <div class="grid grid-cols-5 gap-2 row">
-        {% for col in "12345" %}
+        {% for col in "01234" %}
           <div class="w-14 h-14 border-2 border-gray-400 flex items-center justify-center text-2xl font-semibold bg-white">
           </div>
         {% endfor %}
       </div>
     {% endfor %}
-  </div>
+  </div> -->
+
+  <!-- Word Grid -->
+<!-- <div class="grid grid-rows-6 gap-2">
+  {% for row in "012345" %}
+    <div id="row-{{ row }}" class="grid grid-cols-5 gap-2 row">
+      {% for col in "01234" %}
+        <div class="w-14 h-14 border-2 border-gray-400 flex items-center justify-center text-2xl font-semibold bg-white tile">
+        </div>
+      {% endfor %}
+    </div>
+  {% endfor %}
+</div> -->
+
+<!-- Word Grid -->
+<div class="grid grid-rows-6 gap-2">
+  {% for row in "012345" %}
+    <div class="grid grid-cols-5 gap-2 row" id="row-{{ row }}">
+      {% for col in "01234" %}
+        <div class="tile w-14 h-14 border-2 border-gray-400 flex items-center justify-center text-2xl font-semibold bg-white">
+        </div>
+      {% endfor %}
+    </div>
+  {% endfor %}
+</div>
+  
+
 
   <!-- Keyboard -->
   <div class="mt-8 space-y-2">

@@ -1,152 +1,152 @@
 
-// let currentGuess = "";
-// let currentRow = 0;
-// const maxGuesses = 6;
-// const wordLength = 5;
-// const targetWord = "CRANE";
+let currentGuess = "";
+let currentRow = 0;
+const maxGuesses = 6;
+const wordLength = 5;
+const targetWord = "CRANE";
 
-// // Get all the tiles and organize them by row
-// const rows = document.querySelectorAll(".row");
-// const tiles = [];
-// rows.forEach((row, rowIndex) => {
-//     const rowTiles = row.querySelectorAll("div");
-//     tiles[rowIndex] = Array.from(rowTiles);
-// });
+// Get all the tiles and organize them by row
+const rows = document.querySelectorAll(".row");
+const tiles = [];
+rows.forEach((row, rowIndex) => {
+    const rowTiles = row.querySelectorAll("div");
+    tiles[rowIndex] = Array.from(rowTiles);
+});
 
-// function handleKeyPress(key) {
-//     if (currentRow >= maxGuesses) return;
+function handleKeyPress(key) {
+    if (currentRow >= maxGuesses) return;
 
-//     if (key === "Enter") {
-//         if (currentGuess.length === wordLength) {
-//             evaluateGuess(currentGuess.toUpperCase());
-//             currentRow++;
-//             currentGuess = "";
-//         } else {
-//             alert("Guess must be 5 letters!");
-//         }
-//     } else if (key === "Backspace") {
-//         if (currentGuess.length > 0) {
-//             currentGuess = currentGuess.slice(0, -1);
-//             updateCurrentRow();
-//         }
-//     } else if (/^[A-Z]$/.test(key) && currentGuess.length < wordLength) {
-//         currentGuess += key;
-//         updateCurrentRow();
-//     }
-// }
+    if (key === "Enter") {
+        if (currentGuess.length === wordLength) {
+            evaluateGuess(currentGuess.toUpperCase());
+            currentRow++;
+            currentGuess = "";
+        } else {
+            alert("Guess must be 5 letters!");
+        }
+    } else if (key === "Backspace") {
+        if (currentGuess.length > 0) {
+            currentGuess = currentGuess.slice(0, -1);
+            updateCurrentRow();
+        }
+    } else if (/^[A-Z]$/.test(key) && currentGuess.length < wordLength) {
+        currentGuess += key;
+        updateCurrentRow();
+    }
+}
 
-// function updateCurrentRow() {
-//     if (currentRow >= maxGuesses) return;
+function updateCurrentRow() {
+    if (currentRow >= maxGuesses) return;
     
-//     const currentTiles = tiles[currentRow];
-//     currentTiles.forEach((tile, i) => {
-//         // Only update if tile hasn't been evaluated yet
-//         if (!tile.classList.contains("evaluated")) {
-//             tile.textContent = currentGuess[i] || "";
-//         }
-//     });
-// }
+    const currentTiles = tiles[currentRow];
+    currentTiles.forEach((tile, i) => {
+        // Only update if tile hasn't been evaluated yet
+        if (!tile.classList.contains("evaluated")) {
+            tile.textContent = currentGuess[i] || "";
+        }
+    });
+}
 
-// function evaluateGuess(guess) {
-//     const currentTiles = tiles[currentRow];
-//     const keyboardButtons = document.querySelectorAll(".keyboard-key");
+function evaluateGuess(guess) {
+    const currentTiles = tiles[currentRow];
+    const keyboardButtons = document.querySelectorAll(".keyboard-key");
 
-//     // Create a copy of the target word to track letter frequencies
-//     const targetFreq = {};
-//     for (let letter of targetWord) {
-//         targetFreq[letter] = (targetFreq[letter] || 0) + 1;
-//     }
+    // Create a copy of the target word to track letter frequencies
+    const targetFreq = {};
+    for (let letter of targetWord) {
+        targetFreq[letter] = (targetFreq[letter] || 0) + 1;
+    }
 
-//     // First pass: mark correct positions (green)
-//     for (let i = 0; i < wordLength; i++) {
-//         const tile = currentTiles[i];
-//         const letter = guess[i];
+    // First pass: mark correct positions (green)
+    for (let i = 0; i < wordLength; i++) {
+        const tile = currentTiles[i];
+        const letter = guess[i];
         
-//         tile.textContent = letter;
-//         tile.classList.add("evaluated");
+        tile.textContent = letter;
+        tile.classList.add("evaluated");
         
-//         if (letter === targetWord[i]) {
-//             tile.classList.add("bg-green-500", "text-black");
-//             targetFreq[letter]--;
-//         }
-//     }
+        if (letter === targetWord[i]) {
+            tile.classList.add("bg-green-500", "text-black");
+            targetFreq[letter]--;
+        }
+    }
 
-//     // Second pass: mark present but wrong position (yellow)
-//     for (let i = 0; i < wordLength; i++) {
-//         const tile = currentTiles[i];
-//         const letter = guess[i];
+    // Second pass: mark present but wrong position (yellow)
+    for (let i = 0; i < wordLength; i++) {
+        const tile = currentTiles[i];
+        const letter = guess[i];
         
-//         if (tile.classList.contains("bg-green-500")) continue;
+        if (tile.classList.contains("bg-green-500")) continue;
         
-//         if (targetFreq[letter] > 0) {
-//             tile.classList.add("bg-yellow-400", "text-black");
-//             targetFreq[letter]--;
-//         } else {
-//             tile.classList.add("bg-gray-400", "text-black");
-//         }
-//     }
+        if (targetFreq[letter] > 0) {
+            tile.classList.add("bg-yellow-400", "text-black");
+            targetFreq[letter]--;
+        } else {
+            tile.classList.add("bg-gray-400", "text-black");
+        }
+    }
 
-//     // Update keyboard colors
-//     for (let i = 0; i < wordLength; i++) {
-//         const letter = guess[i];
-//         const button = Array.from(keyboardButtons).find(btn => 
-//             btn.textContent.trim() === letter
-//         );
+    // Update keyboard colors
+    for (let i = 0; i < wordLength; i++) {
+        const letter = guess[i];
+        const button = Array.from(keyboardButtons).find(btn => 
+            btn.textContent.trim() === letter
+        );
         
-//         if (!button) continue;
+        if (!button) continue;
         
-//         const tile = currentTiles[i];
-//         if (tile.classList.contains("bg-green-500")) {
-//             button.classList.remove("bg-yellow-400", "bg-gray-400");
-//             button.classList.add("bg-green-500", "text-white");
-//         } else if (tile.classList.contains("bg-yellow-400") && 
-//                    !button.classList.contains("bg-green-500")) {
-//             button.classList.remove("bg-gray-400");
-//             button.classList.add("bg-yellow-400", "text-white");
-//         } else if (!button.classList.contains("bg-green-500") && 
-//                    !button.classList.contains("bg-yellow-400")) {
-//             button.classList.add("bg-gray-400", "text-white");
-//         }
-//     }
+        const tile = currentTiles[i];
+        if (tile.classList.contains("bg-green-500")) {
+            button.classList.remove("bg-yellow-400", "bg-gray-400");
+            button.classList.add("bg-green-500", "text-white");
+        } else if (tile.classList.contains("bg-yellow-400") && 
+                   !button.classList.contains("bg-green-500")) {
+            button.classList.remove("bg-gray-400");
+            button.classList.add("bg-yellow-400", "text-white");
+        } else if (!button.classList.contains("bg-green-500") && 
+                   !button.classList.contains("bg-yellow-400")) {
+            button.classList.add("bg-gray-400", "text-white");
+        }
+    }
 
-//     // Check win/loss
-//     if (guess === targetWord) {
-//         setTimeout(() => {
-//             alert("Congratulations! You guessed the word!");
-//             disableInput();
-//         }, 100);
-//     } else if (currentRow + 1 >= maxGuesses) {
-//         setTimeout(() => {
-//             alert(`Game Over! The word was ${targetWord}.`);
-//             disableInput();
-//         }, 100);
-//     }
-// }
+    // Check win/loss
+    if (guess === targetWord) {
+        setTimeout(() => {
+            alert("Congratulations! You guessed the word!");
+            disableInput();
+        }, 100);
+    } else if (currentRow + 1 >= maxGuesses) {
+        setTimeout(() => {
+            alert(`Game Over! The word was ${targetWord}.`);
+            disableInput();
+        }, 100);
+    }
+}
 
-// // Keyboard event listeners
-// document.querySelectorAll(".keyboard-key").forEach(button => {
-//     button.addEventListener("click", () => {
-//         let key = button.textContent.trim();
-//         if (key === "⌫") key = "Backspace";
-//         else if (key === "Enter") key = "Enter";
-//         else key = key.toUpperCase();
-//         handleKeyPress(key);
-//     });
-// });
+// Keyboard event listeners
+document.querySelectorAll(".keyboard-key").forEach(button => {
+    button.addEventListener("click", () => {
+        let key = button.textContent.trim();
+        if (key === "⌫") key = "Backspace";
+        else if (key === "Enter") key = "Enter";
+        else key = key.toUpperCase();
+        handleKeyPress(key);
+    });
+});
 
-// document.addEventListener("keydown", (e) => {
-//     let key = e.key.toUpperCase();
-//     if (key === "BACKSPACE") key = "Backspace";
-//     if (key === "ENTER") key = "Enter";
-//     handleKeyPress(key);
-// });
+document.addEventListener("keydown", (e) => {
+    let key = e.key.toUpperCase();
+    if (key === "BACKSPACE") key = "Backspace";
+    if (key === "ENTER") key = "Enter";
+    handleKeyPress(key);
+});
 
-// function disableInput() {
-//     document.querySelectorAll(".keyboard-key").forEach(button => {
-//         button.disabled = true;
-//     });
-//     document.removeEventListener("keydown", handleKeyPress);
-// }
+function disableInput() {
+    document.querySelectorAll(".keyboard-key").forEach(button => {
+        button.disabled = true;
+    });
+    document.removeEventListener("keydown", handleKeyPress);
+}
 
 
 
