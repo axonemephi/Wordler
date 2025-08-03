@@ -1,4 +1,5 @@
 import os
+import random
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 import json
@@ -33,3 +34,14 @@ def validate_guess(request):
         except json.JSONDecodeError:
             return JsonResponse({"valid": False, "error": "Invalid JSON."})
     return JsonResponse({"error": "Only POST method allowed."}, status=405)
+
+@csrf_exempt
+def get_target_word(request):
+    if request.method == "GET":
+        try:
+            # Select a random word from the valid words
+            target_word = random.choice(list(VALID_WORDS))
+            return JsonResponse({"word": target_word})
+        except Exception as e:
+            return JsonResponse({"error": str(e)}, status=500)
+    return JsonResponse({"error": "Only GET method allowed."}, status=405)
